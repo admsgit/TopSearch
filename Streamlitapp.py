@@ -45,6 +45,15 @@ def avgDuration(numVideos):
     duration = f"Average of top {numVideos} videos is : {avgMinutes} Min {avgSeconds} Sec"
     return duration
 
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
 st.title('Generate Video Details')
 form = st.form(key='my-form')
 search_term = form.text_input('Enter the search term :')
