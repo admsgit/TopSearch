@@ -34,6 +34,7 @@ num_shorts_video=5
 numVideosToAnalyse=20
 total_images=num_pages*images_per_page
 
+
 training_url="https://abhigyanresources.com/vwtraining"
 fullversion_url="https://abhigyanresources.com/vwfull"
 users_url="https://abhigyanresources.com/vwusers"
