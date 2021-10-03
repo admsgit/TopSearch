@@ -156,6 +156,15 @@ def mainSearch(searchTerm,demostatus):
 
     st.header("[Click Here To Download](https://abhigyanresources.com/top-search/)")
 
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
 #Render the page 
 st.title('Generate Video Details')
 form = st.form(key='my-form')
@@ -170,8 +179,6 @@ st.write('Press submit to start')
 if submit:
     st.write(f'Search Term Is : {search_term}')   
     mainSearch(search_term,"N")
-    
-    
     
     
 
