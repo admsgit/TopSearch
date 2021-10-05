@@ -6,7 +6,8 @@ import re
 import pandas as pd
 import numpy as np
 
-numVideosToAnalyse=5
+numVideosToAnalyse=10
+users_url="https://abhigyanresources.com/vwusers"
 
 def video_details(video_id):     
     
@@ -95,10 +96,7 @@ def mainSearch(searchTerm,demostatus):
     tagSeries = pd.Series(strTags.split (','))   
 
     tagWordFrame = pd.DataFrame(tagWords,columns=['Words'])
-    st.header("Most Used Words :")
-    st.write("Word1 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[0]) 
-    st.write("Word2 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
-    st.write("Word3 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2]) 
+
 
     #Build 3 series based on Top 3 words by frequency of occurance
     tagSeries1=tagSeries[tagSeries.str.contains(tagWordFrame['Words'].value_counts()[:3].index.tolist()[0].lower())]
@@ -107,20 +105,20 @@ def mainSearch(searchTerm,demostatus):
 
     #Get unique list of items from tagSeries1,tagSeries2,tagSeries3
     tagList = pd.Series(tagSeries1.unique().tolist()+tagSeries2.unique().tolist()+tagSeries3.unique().tolist()).unique().tolist()
-    st.header("Suggested Tags : ")
+
     
     if(demostatus=='N'):
         tagDisplay=""
         for x in range(len(tagList)):
             tagDisplay=tagList[x]+","+tagDisplay
         tagDisplay=tagDisplay[:-1]
-        st.write(tagDisplay)
+
     else:
         tagDisplayDemo=""
         for x in range(3):
             tagDisplayDemo=tagList[x]+","+tagDisplayDemo
         tagDisplayDemo=tagDisplayDemo[:-1]
-        st.write(tagDisplayDemo)
+        
 
 
     #Generate video names based from tagList based on index generated randomly
@@ -131,24 +129,60 @@ def mainSearch(searchTerm,demostatus):
     vidName1=0
     vidName2=1
     vidNameList=[]
-    st.header("Suggested Video Names\n")
+
     for i in range(numberOfVideosPossible):
         vidName=tagList[tagnumber[vidName1]]+"-"+tagList[tagnumber[vidName2]]
         vidNameList.append(vidName.title())
-        st.write(f"{i+1}. {vidName.title()}")
+        #st.write(f"{i+1}. {vidName.title()}")
         vidName1+=2
         vidName2+=2
 
+    if(demostatus=='N'):
+        st.header("Most Used Words :")
+        st.write("Word1 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[0]) 
+        st.write("Word2 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
+        st.write("Word3 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2])  
+    else:
+        st.header("Most Used Words :")
+        st.write("Word1 : Top Used Word Available In Full Version Only\n") 
+        st.write("Word2 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
+        st.write("Word3 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2]) 
+       
 
+    st.header("\n\nSuggested Tags : \n")
+    if(demostatus=='N'):
+        st.write(tagDisplay) 
+    else:
+        st.write(f"Displaying 3 of total {len(tagList)} tags available\n")
+        st.write(tagDisplayDemo)       
+    
+
+    st.header("Suggested Video Names\n")
+    
+    if(demostatus=='N'):
+        for i in range(len(vidNameList)):
+            st.write(f"{i+1}. {vidNameList[i]}\n")
+    else:
+        st.write(f"Showing 3 of total {len(vidNameList)} suggested video names available \n")
+        for i in range(3):
+            st.write(f"{i+1}. {vidNameList[i]}\n")
 
     st.header("Video Duration :")
-    st.write(avgDuration(3,Duration))
-    st.write(avgDuration(numVideoIds,Duration))
+    if(demostatus=='N'):
+        st.write(avgDuration(3,Duration))
+        st.write(avgDuration(numVideoIds,Duration))
+    else:
+        st.write(avgDuration(3,Duration))
+        st.write(f"\n Average of top {numVideoIds} videos is available in full version only.")
+        st.write("\n\nTo get complete details upgrade to 'Full' version today.")
+        st.header("[Click Here To Get Full Version](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FLA5QGCKTZJSN)")
 
-    st.title("\n\n Special Note : \n")
+
+
+    st.title("\n\n Special Note ( For Windows Users) \n")
     st.write(" If you are a windows users, then this is special section for you.\n")
     st.write(" Introducing smart software 'Top Search'.\n")
-    st.write(" Here 5 videos were analysed. But, 'Top Search' will analyse 20 videos and also generate videos for you.")
+    st.write(" Here 10 videos were analysed. But, 'Top Search' will analyse 20 videos and also generate videos for you.")
     st.write("It will generate 2 regular videos and 5 shorts videos with just 1 click. \n")
     st.header(" Watch the video for details \n")
     st.write("[Click Here To Download & Try Free Demo](https://abhigyanresources.com/top-search/)")
@@ -165,20 +199,51 @@ footer {visibility: hidden;}
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
+
+def validateUser(user_email):
+        emaillist=[]
+        demostatus = 'N'
+        if user_email.lower() =="demo":
+            demostatus = 'Y'
+
+        if demostatus == 'N':
+            page = requests.get(users_url)
+            soupUserContent = bs(page.content, 'html.parser')
+            for i in range(2,(len(soupUserContent.find_all('p'))-1)):
+                emaillist.append((str(soupUserContent.find_all('p')[i]).rstrip("</p>")).lstrip("<p>")) 
+
+        if ((user_email in emaillist) or (demostatus=='Y')):
+            if demostatus == 'Y':
+                st.header("Demo Activated")
+                mainSearch(search_term,"Y")
+            else:
+                st.header("Email id Validated")
+                mainSearch(search_term,"N")
+        else:
+            st.title("Invalid email id. Check and try again.")
+
+
 #Render the page 
 st.title('Generate Video Details')
 form = st.form(key='my-form')
+user_email = form.text_input('Enter registered email :')
 search_term = form.text_input('Enter the search term :')
 submit = form.form_submit_button('Submit')
-
-st.write('Press submit to start')
+st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
+st.header('Click Submit Button To Start')
 
 
 
 
 if submit:
-    st.write(f'Search Term Is : {search_term}')   
-    mainSearch(search_term,"N")
+
+    if search_term=="" or user_email=="":
+        st.title("Email and Search Term cannot be blank")
+    else:
+        validateUser(user_email)
+
+
+
     
     
 
