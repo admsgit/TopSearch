@@ -179,16 +179,16 @@ def mainSearch(searchTerm,demostatus):
 
 
 
-    #st.title("\n\n Special Note ( For Windows Users) \n")
-    #st.write(" If you are a windows users, then this is special section for you.\n")
-    #st.write(" Introducing smart software 'Top Search'.\n")
-    #st.write(" Here 10 videos were analysed. But, 'Top Search' will analyse 20 videos and also generate videos for you.")
-    #st.write("It will generate 2 regular videos and 5 shorts videos with just 1 click. \n")
-    #st.header(" Watch the video for details \n")
-    #st.write("[Click Here To Download & Try Free Demo](https://abhigyanresources.com/top-search/)")
-    #st.video('https://www.youtube.com/watch?v=vQSAkXcEvOw')
+    st.title("\n\n Special Note ( For Windows Users) \n")
+    st.write(" If you are a windows users, then this is special section for you.\n")
+    st.write(" Introducing smart software 'Top Search'.\n")
+    st.write(" Here 10 videos were analysed. But, 'Top Search' will analyse 20 videos and also generate videos for you.")
+    st.write("It will generate 2 regular videos and 5 shorts videos with just 1 click. \n")
+    st.header(" Watch the video for details \n")
+    st.write("[Click Here To Download & Try Free Demo](https://abhigyanresources.com/top-search/)")
+    st.video('https://www.youtube.com/watch?v=vQSAkXcEvOw')
 
-    #st.header("[Click Here To Download](https://abhigyanresources.com/top-search/)")
+    st.header("[Click Here To Download](https://abhigyanresources.com/top-search/)")
 
 hide_streamlit_style = """
 <style>
