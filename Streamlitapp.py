@@ -241,6 +241,7 @@ if submit:
         st.title("Email and Search Term cannot be blank")
     else:
         validateUser(user_email)
+        
 
 
 
