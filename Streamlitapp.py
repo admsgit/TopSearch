@@ -199,9 +199,6 @@ def mainSearch(searchTerm,demostatus):
     st.header("[Click Here To Download](https://abhigyanresources.com/top-search/)")
 
 
-st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
-
-
 def validateUser(user_email):
         emaillist=[]
         demostatus = 'N'
