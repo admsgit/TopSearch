@@ -349,22 +349,6 @@ def gplayDetails(app_url):
     st.write("1. Create 2 special animated video for your app with male/female voice. You can use any of these in play store.")
     st.write("2. Let you know about a special method to elliminate negative reviews and get more positive reviews.")
     st.header("[Click Here To Contact Us](https://abhigyandms.com/contact-form/)")
-def send_mail(user_email,sys):
-    receiver = "abhigyandms@gmail.com"
-    body = "App In Use Notification"
-    #filename = "document.pdf"
-    yag = yagmail.SMTP("sonamappsplatform@gmail.com", st.secrets["email_pass"])
-    #yag = yagmail.SMTP("sonamappsplatform@gmail.com")
-    platform = "Youtube"
-    if sys=='G':
-        platform = "Google Play"
-
-    yag.send(
-        to=receiver,
-        subject="New User",
-        contents=f"{user_email} is using {platform} search" 
-        #attachments=filename,
-    )
 
 #st.title('Generate Video Details')
 #form = st.form(key='my-form')
@@ -375,16 +359,12 @@ def send_mail(user_email,sys):
 #st.header('Click Submit Button To Start')
 
 
-
-
-
-
 col1, col2 = st.columns(2)
 
 with col1:
     st.header('Generate Youtube Video Details')
     form = st.form(key='youtube-form')
-    user_email = form.text_input('Enter your email :')
+    #user_email = form.text_input('Enter your email :')
     search_term = form.text_input('Enter the search term :')
     submit_youtube = form.form_submit_button('Submit')
     #st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
@@ -394,28 +374,28 @@ with col1:
 with col2:
     st.header('Generate Google Play Details')
     form_gplay = st.form(key='form_gplay')
-    user_email_gplay = form_gplay.text_input('Enter your email :')
+    #user_email_gplay = form_gplay.text_input('Enter your email :')
     app_url = form_gplay.text_input('Enter app url :')
     #search_term = form.text_input('Enter the search term :')
     submit_gplay = form_gplay.form_submit_button('Submit')
     #st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
     #st.write('Click Submit Button To Start')
 st.header('Click Submit Button To Start')
-st.write('Note:- Your email is safe and will not be shared with third parties or sold anytime.')
+#st.write('Note:- Your email is safe and will not be shared with third parties or sold anytime.')
 
 if submit_youtube:
-    if search_term=="" or user_email=="":
-        st.title("Email and Search Term cannot be blank")
+    if search_term=="":# or user_email=="":
+        #st.title("Email and Search Term cannot be blank")
+        st.title("Search Term cannot be blank")
     else:
         #validateUser(user_email) 
-        send_mail(user_email,'Y')
         mainSearch(search_term,"N")  
     
 if submit_gplay:
-    if app_url=="" or user_email_gplay=="":
-        st.title("Email and App URL cannot be blank")
+    if app_url=="": #or user_email_gplay=="":
+        #st.title("Email and App URL cannot be blank")
+        st.title("App URL cannot be blank")
     else:
-        send_mail(user_email_gplay,'G')
         gplayDetails(app_url)
 
     
