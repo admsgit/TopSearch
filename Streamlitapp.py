@@ -375,6 +375,9 @@ with col2:
     #st.write('Click Submit Button To Start')
 st.header('Click Submit Button To Start')
 #st.write('Note:- Your email is safe and will not be shared with third parties or sold anytime.')
+st.title('Bonus')
+st.write("[Free Training ( Register Now) - Learn The Path To $30,000/Month With Apps - Click Here](https://admsapps.teachable.com/p/learn-to-build-app1)")
+
 
 if submit_youtube:
     if search_term=="":# or user_email=="":
