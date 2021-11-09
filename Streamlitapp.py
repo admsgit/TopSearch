@@ -10,8 +10,8 @@ from google_play_scraper import app
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
-#nltk.download('stopwords')
-#nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt')
 from nltk import FreqDist
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 #import yagmail
