@@ -14,7 +14,7 @@ from nltk.corpus import stopwords
 #nltk.download('punkt')
 from nltk import FreqDist
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import yagmail
+#import yagmail
 
 numVideosToAnalyse=10
 users_url="https://abhigyanresources.com/vwusers"
