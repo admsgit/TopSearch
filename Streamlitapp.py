@@ -200,9 +200,8 @@ st.header('Click Submit Button To Start')
 
 if submit:
 
-    if user_email=="" or website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="":
+    if user_email=="" or website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="" or link_text=="":
         st.title("Fields cannot be blank")
     else:
         validateUser(user_email)
-        
 
