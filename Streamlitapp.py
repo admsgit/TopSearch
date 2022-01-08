@@ -97,7 +97,7 @@ def mainSearch(demostatus):
             
             st.write(f"{searchwordNum+1}.Posting To Website For : {searchTerm}")        
             #st.write("Starting Post :",videoNumber+1)
-            videoDetailList=video_details(video_ids[1])
+            videoDetailList=video_details(video_ids[0])
             Title=""
             Description=""
             Tags=""
@@ -131,7 +131,7 @@ def mainSearch(demostatus):
             <p>
             <strong>Watch the video to know about {searchTerm}.&nbsp;</strong></p>
             <p>
-            <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[1]}?rel=0" width="640"></iframe></p>
+            <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[0]}?rel=0" width="640"></iframe></p>
             <p>
             <br><br>{Description}
             <p>
