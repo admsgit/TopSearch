@@ -196,7 +196,7 @@ st.header('Click Submit Button To Start')
 if submit:
 
     if website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="" or link_text=="":
-        st.title("Fields cannot be blank")
+        st.title("Error : Fields cannot be blank")
     else:
         mainSearch("N")
         
