@@ -173,9 +173,9 @@ def validateUser(user_email):
 
 
 #Render the page 
-st.title('WP Content Builder')
+#st.title('WP Content Builder')
 form = st.form(key='my-form')
-user_email = form.text_input('Enter registered email :')
+#user_email = form.text_input('Enter registered email :')
 #search_term = form.text_input('Enter the search term :')
 
 website=form.text_input("Enter your website : ")
@@ -195,10 +195,10 @@ st.header('Click Submit Button To Start')
 
 if submit:
 
-    if user_email=="" or website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="" or link_text=="":
+    if website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="" or link_text=="":
         st.title("Fields cannot be blank")
     else:
-        validateUser(user_email)
+        mainSearch("N")
         
         
         
@@ -208,4 +208,3 @@ if submit:
         
         
         
-
