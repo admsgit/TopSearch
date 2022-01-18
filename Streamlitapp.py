@@ -126,10 +126,7 @@ def mainSearch(demostatus):
                 else:
                     tagPost = tagPost+tags[i] 
 
-            NewDescription = f'''{Title}<p>
-            &nbsp;</p>
-            <p>
-            <strong>Watch the video to know about {searchTerm}.&nbsp;</strong></p>
+            NewDescription = f'''
             <p>
             <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[1]}?rel=0" width="640"></iframe></p>
             <p>
