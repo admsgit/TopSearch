@@ -187,7 +187,7 @@ link_text=form.text_input("Enter text for affiliate link : ")
 affiliate_link=form.text_input("Enter affilite link : ")
 
 submit = form.form_submit_button('Submit')
-st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
+#st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
 st.header('Click Submit Button To Start')
 
 
