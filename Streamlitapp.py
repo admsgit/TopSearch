@@ -173,7 +173,7 @@ def validateUser(user_email):
 
 
 #Render the page 
-st.title('WP Affiliate Site Builder')
+st.title('WP Content Builder')
 form = st.form(key='my-form')
 user_email = form.text_input('Enter registered email :')
 #search_term = form.text_input('Enter the search term :')
