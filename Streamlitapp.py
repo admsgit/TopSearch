@@ -129,8 +129,7 @@ def mainSearch(demostatus):
                 else:
                     tagPost = tagPost+tags[i] 
 
-            NewDescription = f'''{Title}<p>
-            &nbsp;</p>
+            NewDescription = f'''
             <p>
             <strong>Watch the video to know about {searchTerm}.&nbsp;</strong></p>
             <p>
