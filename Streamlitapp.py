@@ -130,8 +130,6 @@ def mainSearch(demostatus):
                     tagPost = tagPost+tags[i] 
 
             NewDescription = f'''
-            <strong style="font-size: 22px;"><a href={affiliate_link} target="_blank">{link_text}&nbsp;</a></strong><br />
-            &nbsp;</p>
             <p>
             <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[1]}?rel=0" width="640"></iframe></p>
             <p>
