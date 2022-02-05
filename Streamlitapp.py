@@ -130,9 +130,6 @@ def mainSearch(demostatus):
                     tagPost = tagPost+tags[i] 
 
             NewDescription = f'''
-            <p>
-            <strong>Watch the video to know about {searchTerm}.&nbsp;</strong></p>
-            <p>
             <strong style="font-size: 22px;"><a href={affiliate_link} target="_blank">{link_text}&nbsp;</a></strong><br />
             &nbsp;</p>
             <p>
