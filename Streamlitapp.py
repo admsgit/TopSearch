@@ -95,7 +95,7 @@ def mainSearch(demostatus):
         videoDetailList=[] 
         #st.write(video_ids)
         if(video_ids[1] in videoId_Selected):
-            st.write(f"Duplicate video found for : {searchTerm}")
+            st.write(f"{searchwordNum+1}.Duplicate video found for : {searchTerm}")
         else:
             videoId_Selected.append(video_ids[1])
             st.write(f"{searchwordNum+1}.Posting To Website For : {searchTerm}")        
