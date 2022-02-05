@@ -83,6 +83,7 @@ def mainSearch(demostatus):
     #This section will handle the category
     st.write(f"Total Posts : {len(searchwords)}")
     # Run a loop to find videos and post to website for each keyword
+    videoId_Selected = ["initial"]
     for searchwordNum in range(len(searchwords)):
         searchTerm=""
         searchTerm= searchwords[searchwordNum]
@@ -93,8 +94,10 @@ def mainSearch(demostatus):
         video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
         videoDetailList=[] 
         #st.write(video_ids)
-        if len(video_ids)>=1:
-            
+        if(video_ids[1] in videoId_Selected):
+            st.write(f"Duplicate video found for : {searchTerm}")
+        else:
+            videoId_Selected.append(video_ids[1])
             st.write(f"{searchwordNum+1}.Posting To Website For : {searchTerm}")        
             #st.write("Starting Post :",videoNumber+1)
             videoDetailList=video_details(video_ids[1])
@@ -126,13 +129,19 @@ def mainSearch(demostatus):
                 else:
                     tagPost = tagPost+tags[i] 
 
-            NewDescription = f'''
+            NewDescription = f'''{Title}<p>
+            &nbsp;</p>
+            <p>
+            <strong>Watch the video to know about {searchTerm}.&nbsp;</strong></p>
+            <p>
+            <strong style="font-size: 22px;"><a href={postData[4]} target="_blank">{postData[5]}&nbsp;</a></strong><br />
+            &nbsp;</p>
             <p>
             <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[1]}?rel=0" width="640"></iframe></p>
             <p>
             <br><br>{Description}
             <p>
-            <strong style="font-size: 22px;"><a href={affiliate_link} target="_blank">{link_text}&nbsp;</a></strong><br />
+            <strong style="font-size: 22px;"><a href={postData[4]} target="_blank">{postData[5]}&nbsp;</a></strong><br />
             &nbsp;</p>'''
             #st.write('NewDescription :',NewDescription)
             
