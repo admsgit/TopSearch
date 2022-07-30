@@ -6,7 +6,7 @@ import re
 import pandas as pd
 import numpy as np
 
-numVideosToAnalyse=20
+numVideosToAnalyse=5
 
 def video_details(video_id):     
     
@@ -80,7 +80,7 @@ def mainSearch(searchTerm,demostatus):
         Duration.append(videoDetailList[0])
         Tags.append(videoDetailList[1])
         
-        
+    st.title('Video Details :\n')   
     #tagSeries = pd.Series(Tags[0].split (','))
 
     #Combine the tags for analysis
@@ -96,9 +96,9 @@ def mainSearch(searchTerm,demostatus):
 
     tagWordFrame = pd.DataFrame(tagWords,columns=['Words'])
     st.header("Most Used Words :")
-    st.write("Word1",tagWordFrame['Words'].value_counts()[:3].index.tolist()[0]) 
-    st.write("Word2",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
-    st.write("Word3",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2]) 
+    st.write("Word1 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[0]) 
+    st.write("Word2 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
+    st.write("Word3 : ",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2]) 
 
     #Build 3 series based on Top 3 words by frequency of occurance
     tagSeries1=tagSeries[tagSeries.str.contains(tagWordFrame['Words'].value_counts()[:3].index.tolist()[0].lower())]
@@ -145,7 +145,25 @@ def mainSearch(searchTerm,demostatus):
     st.write(avgDuration(3,Duration))
     st.write(avgDuration(numVideoIds,Duration))
 
-    #st.video(https://www.youtube.com/watch?v=vQSAkXcEvOw)
+    st.title("\n\n Special Note : \n")
+    st.write(" If you are a windows users, then this is special section for you.\n")
+    st.write(" Introducing smart software 'Top Search'.\n")
+    st.write(" Here 5 videos were analysed. But, 'Top Search' will analyse 20 videos and also generate videos for you.")
+    st.write("It will generate 2 regular videos and 5 shorts videos with just 1 click. \n")
+    st.header(" Watch the video for details \n")
+    st.write("[Click Here To Download & Try Free Demo](https://abhigyanresources.com/top-search/)")
+    st.video('https://www.youtube.com/watch?v=vQSAkXcEvOw')
+
+    st.header("[Click Here To Download](https://abhigyanresources.com/top-search/)")
+
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 #Render the page 
 st.title('Generate Video Details')
@@ -155,11 +173,13 @@ submit = form.form_submit_button('Submit')
 
 st.write('Press submit to start')
 
+
+
+
 if submit:
     st.write(f'Search Term Is : {search_term}')   
     mainSearch(search_term,"N")
-
-
+    
     
 
     
