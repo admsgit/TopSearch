@@ -159,7 +159,6 @@ if submit:
     st.write(f'Search Term Is : {search_term}')   
     mainSearch(search_term,"N")
 
-    st.video(https://www.youtube.com/watch?v=vQSAkXcEvOw)
 
     
 
