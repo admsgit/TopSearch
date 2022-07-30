@@ -3,211 +3,165 @@ from bs4 import BeautifulSoup as bs
 import requests
 import urllib.request
 import re
-import webbrowser
+import pandas as pd
+import numpy as np
 
-import os
-import json
-from wordpress_xmlrpc import Client, WordPressPost
-from wordpress_xmlrpc.methods import media, posts
-from wordpress_xmlrpc.compat import xmlrpc_client
-
-from pytrends.request import TrendReq
-
-users_url="https://abhigyanresources.com/vwusers"
-
-def do_post(title,excerpt,content,tags,category):
-    #id = user_id
-    #password = password
-    url = website+r"//xmlrpc.php"
-    post_status = 'publish'#'draft'
-    wp = Client(url, user_id, password)
-    
-    post = WordPressPost()
-    post.post_status = post_status
-    post.title = title
-    post.content = content
-    post.excerpt = excerpt
-    post.terms_names = {
-        "post_tag": [tags],
-        "category": [category]
-    }
-
-    wp.call(posts.NewPost(post))
+numVideosToAnalyse=10
 
 def video_details(video_id):     
     
     result=""
     
     video_url = "https://www.youtube.com/watch?v=" + video_id
-    st.write(video_url)
     video_url_data = requests.get(video_url)
     
     soup = bs(video_url_data.content, 'html.parser')    
-    title=soup.find("meta", itemprop="name")['content']
-    description=soup.find("meta", itemprop="description")['content']
+    #title=soup.find("meta", itemprop="name")['content']
+    #views=soup.find("meta", itemprop="interactionCount")['content']
+    #description=soup.find("meta", itemprop="description")['content']
+    #datePublished=soup.find("meta", itemprop="datePublished")['content']
+    duration=soup.find("meta", itemprop="duration")['content']
     tags=', '.join([ meta.attrs.get("content") for meta in soup.find_all("meta", {"property": "og:video:tag"}) ])
     
-    result=[title,description,tags]
+    #result=[title,views,description,datePublished,duration,tags]
+    result=[duration,tags]
     
     return result
 
+def avgDuration(numVideos,Duration):
+    totalTime=0
+    for x in range(numVideos):
+        time=((Duration[x].lstrip('PT')).rstrip('S')).replace('M',',').split(",")
+        totalTime=totalTime+int(time[0])*60+int(time[1])
+    avgTime = totalTime//numVideos
+    avgMinutes = avgTime//60
+    avgSeconds = avgTime%60
+    duration = f"Average of top {numVideos} videos is : {avgMinutes} Min {avgSeconds} Sec"
+    return duration
 
-def mainSearch(demostatus):
-    searchwords=[]
-    # convert the keywords into a list
-    searchwords = keywords.split(',')
+    
+def mainSearch(searchTerm,demostatus):    
 
-    #
-    if (len(searchwords)==1 and searchwords[0].lower() == "trends"):
-        st.write(f"Trends Section Activated")
-        trend_words=[]
-        pytrends = TrendReq(hl='en-US', tz=360)
-        trend_words_india=pytrends.trending_searches(pn='india')
-        for i in range(5):
-            trend_words.append((trend_words_india[0][i].encode("ascii", "ignore").decode()).lower())
-            
-        trend_words_us=pytrends.trending_searches(pn='united_states')
-        for i in range(5):
-            trend_words.append((trend_words_us[0][i].encode("ascii", "ignore").decode()).lower())
-            
-        trend_words_uk=pytrends.trending_searches(pn='united_kingdom')
-        for i in range(5):
-            trend_words.append((trend_words_uk[0][i].encode("ascii", "ignore").decode()).lower())
-            
-        trend_set=set(trend_words)
-        final_trend_words=list(trend_set)
-        searchwords = final_trend_words
+    searchTerm_filehelp=searchTerm.replace(" ","_")
+    #st.write(searchTerm)
+    
+    #st.write(demostatus)
+    
+    #Title=[]
+    #Views=[]
+    #Description=[]
+    #DatePublished=[]
+    Duration=[]
+    Tags=[] 
+    
+    searchQuery="https://www.youtube.com/results?search_query="+(searchTerm.replace("""#""","")).replace(" ","+") 
+    #st.write(searchQuery)
+    
+    html = urllib.request.urlopen(searchQuery)
+    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+    videoDetailList=[]
+    
+    numVideoIds=numVideosToAnalyse
+    if len(video_ids) < numVideosToAnalyse :
+        numVideoIds=len(video_ids)
+    #st.write("Number of videos to analyse :",numVideoIds)
+    
+    for x in range(numVideoIds):
+        st.write("Analyzing Video ",x+1," of ",numVideoIds,"... ")
+        videoDetailList=video_details(video_ids[x])
 
-
-
-    #This section will handle the category
-    st.write(f"Total Posts : {len(searchwords)}")
-    # Run a loop to find videos and post to website for each keyword
-    videoId_Selected = ["initial"]
-    for searchwordNum in range(len(searchwords)):
-        searchTerm=""
-        searchTerm= searchwords[searchwordNum]
-        searchQuery="https://www.youtube.com/results?search_query="+(searchTerm.replace("""#""","")).replace(" ","+") 
-        #st.write(searchQuery)
+        #Title.append(videoDetailList[0])
+        #Views.append(videoDetailList[1])
+        #Description.append(videoDetailList[2])
+        #DatePublished.append(videoDetailList[3])
+        #Duration.append(videoDetailList[4])
+        #Tags.append(videoDetailList[5])
         
-        html = urllib.request.urlopen(searchQuery)
-        video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-        videoDetailList=[] 
-        #st.write(video_ids)
-        if(video_ids[1] in videoId_Selected):
-            st.write(f"{searchwordNum+1}.Duplicate video found for : {searchTerm}")
-        else:
-            videoId_Selected.append(video_ids[1])
-            st.write(f"{searchwordNum+1}.Posting To Website For : {searchTerm}")        
-            #st.write("Starting Post :",videoNumber+1)
-            videoDetailList=video_details(video_ids[1])
-            Title=""
-            Description=""
-            Tags=""
-            Title=videoDetailList[0].replace(',',' ')
-            Description=videoDetailList[1].replace(',',' ')
-            Tags=videoDetailList[2]
+        Duration.append(videoDetailList[0])
+        Tags.append(videoDetailList[1])
+        
+        
+    #tagSeries = pd.Series(Tags[0].split (','))
 
-            if Tags=="":
-                Tags = Title
+    #Combine the tags for analysis
+    strTags=""
+    tagWords=""
+    for x in range(len(Tags)):
+        strTags=strTags+((Tags[x].lower()).encode("ascii", "ignore")).decode()
+        
+    #Will split tags to individual words
+    tagWords=strTags.replace(',','').split(' ')  
+    #Will split all tags to different items 
+    tagSeries = pd.Series(strTags.split (','))   
 
-            #st.write('Title :',Title)
-            #st.write('Description :',Description)
-            #st.write('Tags :',Tags)
+    tagWordFrame = pd.DataFrame(tagWords,columns=['Words'])
+    st.header("Most Used Words :")
+    st.write("Word1",tagWordFrame['Words'].value_counts()[:3].index.tolist()[0]) 
+    st.write("Word2",tagWordFrame['Words'].value_counts()[:3].index.tolist()[1]) 
+    st.write("Word3",tagWordFrame['Words'].value_counts()[:3].index.tolist()[2]) 
 
-            #Select just 4 tags - More will be give error while wordpress post
-            tags = Tags.split(',')   
-            tagPost=""
-            if (len(tags)<=4):
-                tagnum = len(tags)
-            else:
-                tagnum =4
+    #Build 3 series based on Top 3 words by frequency of occurance
+    tagSeries1=tagSeries[tagSeries.str.contains(tagWordFrame['Words'].value_counts()[:3].index.tolist()[0].lower())]
+    tagSeries2=tagSeries[tagSeries.str.contains(tagWordFrame['Words'].value_counts()[:3].index.tolist()[1].lower())]
+    tagSeries3=tagSeries[tagSeries.str.contains(tagWordFrame['Words'].value_counts()[:3].index.tolist()[2].lower())]
 
-            for i in range(tagnum):
-                if(i>0):
-                    tagPost = tagPost+","+tags[i]
-                else:
-                    tagPost = tagPost+tags[i] 
+    #Get unique list of items from tagSeries1,tagSeries2,tagSeries3
+    tagList = pd.Series(tagSeries1.unique().tolist()+tagSeries2.unique().tolist()+tagSeries3.unique().tolist()).unique().tolist()
+    st.header("Suggested Tags : ")
+    
+    if(demostatus=='N'):
+        tagDisplay=""
+        for x in range(len(tagList)):
+            tagDisplay=tagList[x]+","+tagDisplay
+        tagDisplay=tagDisplay[:-1]
+        st.write(tagDisplay)
+    else:
+        tagDisplayDemo=""
+        for x in range(3):
+            tagDisplayDemo=tagList[x]+","+tagDisplayDemo
+        tagDisplayDemo=tagDisplayDemo[:-1]
+        st.write(tagDisplayDemo)
 
-            NewDescription = f'''
-            <p>
-            <iframe allowfullscreen="" frameborder="0" height="360" src="//www.youtube.com/embed/{video_ids[1]}?rel=0" width="640"></iframe></p>
-            <p>
-            <br><br>{Description}
-            <p>
-            <strong style="font-size: 22px;"><a href={affiliate_link} target="_blank">{link_text}&nbsp;</a></strong><br />
-            &nbsp;</p>'''
-            #st.write('NewDescription :',NewDescription)
-            
-            do_post(Title,"Watch "+Title,NewDescription,tagPost,"Trending")
-            st.write("Post Done")
-    st.write("All Posts Completed")
 
-hide_streamlit_style = """
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-</style>
+    #Generate video names based from tagList based on index generated randomly
+    tagnumber=np.random.randint(0,len(tagList),len(tagList))
 
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+    numberOfVideosPossible = len(tagList)//2
 
-def validateUser(user_email):
-        emaillist=[]
-        demostatus = 'N'
-        if user_email.lower() =="demo":
-            demostatus = 'Y'
+    vidName1=0
+    vidName2=1
+    vidNameList=[]
+    st.header("Suggested Video Names\n")
+    for i in range(numberOfVideosPossible):
+        vidName=tagList[tagnumber[vidName1]]+"-"+tagList[tagnumber[vidName2]]
+        vidNameList.append(vidName.title())
+        st.write(f"{i+1}. {vidName.title()}")
+        vidName1+=2
+        vidName2+=2
 
-        if demostatus == 'N':
-            page = requests.get(users_url)
-            soupUserContent = bs(page.content, 'html.parser')
-            for i in range(2,(len(soupUserContent.find_all('p'))-1)):
-                emaillist.append((str(soupUserContent.find_all('p')[i]).rstrip("</p>")).lstrip("<p>")) 
 
-        if ((user_email in emaillist) or (demostatus=='Y')):
-            if demostatus == 'Y':
-                st.header("Demo Activated")
-                mainSearch("Y")
-            else:
-                st.header("Email id Validated")
-                mainSearch("N")
-        else:
-            st.title("Invalid email id. Check and try again.")
 
+    st.header("Video Duration :")
+    st.write(avgDuration(3,Duration))
+    st.write(avgDuration(numVideoIds,Duration))
+
+    #st.video(https://www.youtube.com/watch?v=vQSAkXcEvOw)
 
 #Render the page 
-#st.title('WP Content Builder')
+st.title('Generate Video Details')
 form = st.form(key='my-form')
-#user_email = form.text_input('Enter registered email :')
-#search_term = form.text_input('Enter the search term :')
-
-website=form.text_input("Enter your website : ")
-user_id=form.text_input("Enter website userid : ")
-password=form.text_input("Enter website password : ")
-
-keywords=form.text_input("Enter keywords - Separate each keyword by comma(,)")
-link_text=form.text_input("Enter text for affiliate link : ")
-affiliate_link=form.text_input("Enter affilite link : ")
-
+search_term = form.text_input('Enter the search term :')
 submit = form.form_submit_button('Submit')
-#st.write("Note:- Enter 'Demo' in registered emailid field To Activate Demo Version")
-st.header('Click Submit Button To Start')
 
-
-
+st.write('Press submit to start')
 
 if submit:
+    st.write(f'Search Term Is : {search_term}')   
+    mainSearch(search_term,"N")
 
-    if website=="" or user_id=="" or password=="" or keywords=="" or affiliate_link=="" or link_text=="":
-        st.title("Error : Fields cannot be blank")
-    else:
-        mainSearch("N")
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    st.video(https://www.youtube.com/watch?v=vQSAkXcEvOw)
+
+    
+
+    
+       
