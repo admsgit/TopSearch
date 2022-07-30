@@ -6,7 +6,7 @@ import re
 import pandas as pd
 import numpy as np
 
-numVideosToAnalyse=10
+numVideosToAnalyse=20
 
 def video_details(video_id):     
     
